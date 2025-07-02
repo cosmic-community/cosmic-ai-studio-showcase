@@ -135,3 +135,9 @@ export interface CosmicResponse<T> {
   object?: T;
   total?: number;
 }
+
+// Error interface for Cosmic API
+export interface CosmicError {
+  status?: number;
+  message?: string;
+}

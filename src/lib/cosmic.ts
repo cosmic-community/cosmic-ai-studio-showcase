@@ -6,7 +6,7 @@ import type {
   BlogPost,
   Testimonial,
   Page,
-  CosmicResponse
+  CosmicError
 } from '@/types/cosmic';
 
 // Initialize Cosmic client
@@ -16,9 +16,17 @@ const cosmic = createBucketClient({
 });
 
 // Error handler for empty results
-function handleCosmicError(error: any): any[] {
+function handleCosmicError(error: CosmicError): any[] {
   if (error?.status === 404) {
     return [];
+  }
+  throw error;
+}
+
+// Single object error handler
+function handleSingleObjectError(error: CosmicError): null {
+  if (error?.status === 404) {
+    return null;
   }
   throw error;
 }
@@ -32,7 +40,7 @@ export async function getShowcaseProjects(): Promise<ShowcaseProject[]> {
       .depth(1);
     return response.objects as ShowcaseProject[];
   } catch (error) {
-    return handleCosmicError(error);
+    return handleCosmicError(error as CosmicError);
   }
 }
 
@@ -47,7 +55,7 @@ export async function getFeaturedProjects(): Promise<ShowcaseProject[]> {
       .depth(1);
     return response.objects as ShowcaseProject[];
   } catch (error) {
-    return handleCosmicError(error);
+    return handleCosmicError(error as CosmicError);
   }
 }
 
@@ -59,10 +67,7 @@ export async function getProjectBySlug(slug: string): Promise<ShowcaseProject | 
       .depth(1);
     return response.object as ShowcaseProject;
   } catch (error) {
-    if (error?.status === 404) {
-      return null;
-    }
-    throw error;
+    return handleSingleObjectError(error as CosmicError);
   }
 }
 
@@ -75,7 +80,7 @@ export async function getVideos(): Promise<Video[]> {
       .depth(1);
     return response.objects as Video[];
   } catch (error) {
-    return handleCosmicError(error);
+    return handleCosmicError(error as CosmicError);
   }
 }
 
@@ -90,7 +95,7 @@ export async function getFeaturedVideos(): Promise<Video[]> {
       .depth(1);
     return response.objects as Video[];
   } catch (error) {
-    return handleCosmicError(error);
+    return handleCosmicError(error as CosmicError);
   }
 }
 
@@ -103,7 +108,7 @@ export async function getUseCases(): Promise<UseCase[]> {
       .depth(1);
     return response.objects as UseCase[];
   } catch (error) {
-    return handleCosmicError(error);
+    return handleCosmicError(error as CosmicError);
   }
 }
 
@@ -115,10 +120,7 @@ export async function getUseCaseBySlug(slug: string): Promise<UseCase | null> {
       .depth(1);
     return response.object as UseCase;
   } catch (error) {
-    if (error?.status === 404) {
-      return null;
-    }
-    throw error;
+    return handleSingleObjectError(error as CosmicError);
   }
 }
 
@@ -131,7 +133,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
       .depth(1);
     return response.objects as BlogPost[];
   } catch (error) {
-    return handleCosmicError(error);
+    return handleCosmicError(error as CosmicError);
   }
 }
 
@@ -146,7 +148,7 @@ export async function getFeaturedBlogPosts(): Promise<BlogPost[]> {
       .depth(1);
     return response.objects as BlogPost[];
   } catch (error) {
-    return handleCosmicError(error);
+    return handleCosmicError(error as CosmicError);
   }
 }
 
@@ -158,10 +160,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
       .depth(1);
     return response.object as BlogPost;
   } catch (error) {
-    if (error?.status === 404) {
-      return null;
-    }
-    throw error;
+    return handleSingleObjectError(error as CosmicError);
   }
 }
 
@@ -174,7 +173,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
       .depth(1);
     return response.objects as Testimonial[];
   } catch (error) {
-    return handleCosmicError(error);
+    return handleCosmicError(error as CosmicError);
   }
 }
 
@@ -187,10 +186,7 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
       .depth(1);
     return response.object as Page;
   } catch (error) {
-    if (error?.status === 404) {
-      return null;
-    }
-    throw error;
+    return handleSingleObjectError(error as CosmicError);
   }
 }
 
