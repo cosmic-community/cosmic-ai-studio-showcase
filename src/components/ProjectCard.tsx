@@ -61,7 +61,7 @@ export default function ProjectCard({ project }: ProjectCardProps): JSX.Element 
         
         {metadata.tech_stack && metadata.tech_stack.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-1">
-            {metadata.tech_stack.slice(0, 3).map((tech, index) => (
+            {metadata.tech_stack.slice(0, 3).map((tech: string, index: number) => (
               <span 
                 key={index}
                 className="text-xs bg-primary-50 text-primary-700 px-2 py-1 rounded"

@@ -28,7 +28,7 @@ export async function getShowcaseProjects(): Promise<ShowcaseProject[]> {
   try {
     const response = await cosmic.objects
       .find({ type: 'showcase-projects' })
-      .props(['id', 'title', 'slug', 'metadata'])
+      .props(['id', 'title', 'slug', 'metadata', 'status'])
       .depth(1);
     return response.objects as ShowcaseProject[];
   } catch (error) {
@@ -43,7 +43,7 @@ export async function getFeaturedProjects(): Promise<ShowcaseProject[]> {
         type: 'showcase-projects',
         'metadata.featured_project': true 
       })
-      .props(['id', 'title', 'slug', 'metadata'])
+      .props(['id', 'title', 'slug', 'metadata', 'status'])
       .depth(1);
     return response.objects as ShowcaseProject[];
   } catch (error) {
@@ -55,7 +55,7 @@ export async function getProjectBySlug(slug: string): Promise<ShowcaseProject | 
   try {
     const response = await cosmic.objects
       .findOne({ type: 'showcase-projects', slug })
-      .props(['id', 'title', 'slug', 'metadata'])
+      .props(['id', 'title', 'slug', 'metadata', 'status'])
       .depth(1);
     return response.object as ShowcaseProject;
   } catch (error) {
@@ -71,7 +71,7 @@ export async function getVideos(): Promise<Video[]> {
   try {
     const response = await cosmic.objects
       .find({ type: 'videos' })
-      .props(['id', 'title', 'slug', 'metadata'])
+      .props(['id', 'title', 'slug', 'metadata', 'status'])
       .depth(1);
     return response.objects as Video[];
   } catch (error) {
@@ -86,7 +86,7 @@ export async function getFeaturedVideos(): Promise<Video[]> {
         type: 'videos',
         'metadata.featured_video': true 
       })
-      .props(['id', 'title', 'slug', 'metadata'])
+      .props(['id', 'title', 'slug', 'metadata', 'status'])
       .depth(1);
     return response.objects as Video[];
   } catch (error) {
@@ -99,7 +99,7 @@ export async function getUseCases(): Promise<UseCase[]> {
   try {
     const response = await cosmic.objects
       .find({ type: 'use-cases' })
-      .props(['id', 'title', 'slug', 'metadata'])
+      .props(['id', 'title', 'slug', 'metadata', 'status'])
       .depth(1);
     return response.objects as UseCase[];
   } catch (error) {
@@ -111,7 +111,7 @@ export async function getUseCaseBySlug(slug: string): Promise<UseCase | null> {
   try {
     const response = await cosmic.objects
       .findOne({ type: 'use-cases', slug })
-      .props(['id', 'title', 'slug', 'metadata'])
+      .props(['id', 'title', 'slug', 'metadata', 'status'])
       .depth(1);
     return response.object as UseCase;
   } catch (error) {
@@ -127,7 +127,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
   try {
     const response = await cosmic.objects
       .find({ type: 'blog-posts' })
-      .props(['id', 'title', 'slug', 'metadata'])
+      .props(['id', 'title', 'slug', 'metadata', 'status'])
       .depth(1);
     return response.objects as BlogPost[];
   } catch (error) {
@@ -142,7 +142,7 @@ export async function getFeaturedBlogPosts(): Promise<BlogPost[]> {
         type: 'blog-posts',
         'metadata.featured_post': true 
       })
-      .props(['id', 'title', 'slug', 'metadata'])
+      .props(['id', 'title', 'slug', 'metadata', 'status'])
       .depth(1);
     return response.objects as BlogPost[];
   } catch (error) {
@@ -154,7 +154,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
   try {
     const response = await cosmic.objects
       .findOne({ type: 'blog-posts', slug })
-      .props(['id', 'title', 'slug', 'metadata'])
+      .props(['id', 'title', 'slug', 'metadata', 'status'])
       .depth(1);
     return response.object as BlogPost;
   } catch (error) {
@@ -170,7 +170,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
   try {
     const response = await cosmic.objects
       .find({ type: 'testimonials' })
-      .props(['id', 'title', 'slug', 'metadata'])
+      .props(['id', 'title', 'slug', 'metadata', 'status'])
       .depth(1);
     return response.objects as Testimonial[];
   } catch (error) {
@@ -183,7 +183,7 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
   try {
     const response = await cosmic.objects
       .findOne({ type: 'pages', slug })
-      .props(['id', 'title', 'slug', 'metadata'])
+      .props(['id', 'title', 'slug', 'metadata', 'status'])
       .depth(1);
     return response.object as Page;
   } catch (error) {
