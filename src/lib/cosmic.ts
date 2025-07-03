@@ -37,7 +37,6 @@ export async function getFeaturedProjects(): Promise<ShowcaseProject[] | null> {
       .find({ type: 'showcase-projects', 'metadata.featured_project': true })
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1)
-      .toPromise()
   );
   return response?.objects || null;
 }
@@ -48,7 +47,6 @@ export async function getAllProjects(): Promise<ShowcaseProject[] | null> {
       .find({ type: 'showcase-projects' })
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1)
-      .toPromise()
   );
   return response?.objects || null;
 }
@@ -58,7 +56,6 @@ export async function getProjectBySlug(slug: string): Promise<ShowcaseProject | 
     cosmic.objects
       .findOne({ type: 'showcase-projects', slug })
       .depth(1)
-      .toPromise()
   );
   return response?.object || null;
 }
@@ -70,7 +67,6 @@ export async function getFeaturedVideos(): Promise<Video[] | null> {
       .find({ type: 'videos', 'metadata.featured_video': true })
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1)
-      .toPromise()
   );
   return response?.objects || null;
 }
@@ -81,7 +77,6 @@ export async function getAllVideos(): Promise<Video[] | null> {
       .find({ type: 'videos' })
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1)
-      .toPromise()
   );
   return response?.objects || null;
 }
@@ -91,7 +86,6 @@ export async function getVideoBySlug(slug: string): Promise<Video | null> {
     cosmic.objects
       .findOne({ type: 'videos', slug })
       .depth(1)
-      .toPromise()
   );
   return response?.object || null;
 }
@@ -103,7 +97,6 @@ export async function getFeaturedBlogPosts(): Promise<BlogPost[] | null> {
       .find({ type: 'blog-posts', 'metadata.featured_post': true })
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1)
-      .toPromise()
   );
   return response?.objects || null;
 }
@@ -114,7 +107,6 @@ export async function getAllBlogPosts(): Promise<BlogPost[] | null> {
       .find({ type: 'blog-posts' })
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1)
-      .toPromise()
   );
   return response?.objects || null;
 }
@@ -124,7 +116,6 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
     cosmic.objects
       .findOne({ type: 'blog-posts', slug })
       .depth(1)
-      .toPromise()
   );
   return response?.object || null;
 }
@@ -136,7 +127,6 @@ export async function getTestimonials(): Promise<Testimonial[] | null> {
       .find({ type: 'testimonials' })
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1)
-      .toPromise()
   );
   return response?.objects || null;
 }
@@ -148,7 +138,6 @@ export async function getUseCases(): Promise<UseCase[] | null> {
       .find({ type: 'use-cases' })
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1)
-      .toPromise()
   );
   return response?.objects || null;
 }
@@ -158,7 +147,6 @@ export async function getUseCaseBySlug(slug: string): Promise<UseCase | null> {
     cosmic.objects
       .findOne({ type: 'use-cases', slug })
       .depth(1)
-      .toPromise()
   );
   return response?.object || null;
 }
@@ -169,7 +157,6 @@ export async function getHomepage(): Promise<Page | null> {
     cosmic.objects
       .findOne({ type: 'pages', slug: 'homepage' })
       .depth(1)
-      .toPromise()
   );
   return response?.object || null;
 }
@@ -179,7 +166,6 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
     cosmic.objects
       .findOne({ type: 'pages', slug })
       .depth(1)
-      .toPromise()
   );
   return response?.object || null;
 }
