@@ -1,3 +1,4 @@
+// src/types/cosmic.ts
 // Type definitions for Cosmic CMS objects
 
 export interface CosmicFile {

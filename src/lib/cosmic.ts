@@ -1,3 +1,4 @@
+// src/lib/cosmic.ts
 import { createBucketClient } from '@cosmicjs/sdk';
 import type {
   ShowcaseProject,
