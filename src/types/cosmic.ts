@@ -24,15 +24,15 @@ export interface CosmicObject {
 // Showcase Project types
 export interface ShowcaseProjectMetadata {
   project_name: string;
-  creator_name: string;
+  creator_name?: string;
   project_description: string;
   screenshot?: CosmicFile;
   additional_images?: CosmicFile[];
-  live_url: string;
-  github_url: string;
+  live_url?: string;
+  github_url?: string;
   project_category?: SelectDropdownValue;
-  tech_stack: string[];
-  development_time: string;
+  tech_stack?: string[];
+  development_time?: string;
   featured_project: boolean;
 }
 
@@ -43,11 +43,11 @@ export interface ShowcaseProject extends CosmicObject {
 // Video types
 export interface VideoMetadata {
   video_title: string;
-  video_description: string;
+  video_description?: string;
   video_url: string;
   thumbnail?: CosmicFile;
   video_type?: SelectDropdownValue;
-  duration: string;
+  duration?: string;
   featured_video: boolean;
 }
 
@@ -58,13 +58,13 @@ export interface Video extends CosmicObject {
 // Blog Post types
 export interface BlogPostMetadata {
   post_title: string;
-  excerpt: string;
+  excerpt?: string;
   content: string;
   featured_image?: CosmicFile;
   category?: SelectDropdownValue;
-  author_name: string;
+  author_name?: string;
   author_photo?: CosmicFile;
-  reading_time: string;
+  reading_time?: string;
   featured_post: boolean;
 }
 
@@ -75,8 +75,8 @@ export interface BlogPost extends CosmicObject {
 // Testimonial types
 export interface TestimonialMetadata {
   customer_name: string;
-  customer_title: string;
-  company_name: string;
+  customer_title?: string;
+  company_name?: string;
   customer_photo?: CosmicFile;
   company_logo?: CosmicFile;
   testimonial_text: string;
@@ -95,12 +95,12 @@ export interface UseCaseMetadata {
   target_audience?: SelectDropdownValue;
   description: string;
   hero_image?: CosmicFile;
-  benefits: Array<{
+  benefits?: Array<{
     title: string;
     description: string;
   }>;
-  ai_features_used: string[];
-  implementation_time: string;
+  ai_features_used?: string[];
+  implementation_time?: string;
 }
 
 export interface UseCase extends CosmicObject {
@@ -110,19 +110,19 @@ export interface UseCase extends CosmicObject {
 // Page types
 export interface PageMetadata {
   page_title: string;
-  meta_description: string;
-  hero_headline: string;
-  hero_subheadline: string;
+  meta_description?: string;
+  hero_headline?: string;
+  hero_subheadline?: string;
   hero_background?: CosmicFile;
-  primary_cta_text: string;
-  primary_cta_link: string;
-  page_content: string;
-  features_section: Array<{
+  primary_cta_text?: string;
+  primary_cta_link?: string;
+  page_content?: string;
+  features_section?: Array<{
     title: string;
     description: string;
     icon: string;
   }>;
-  show_build_cta: boolean;
+  show_build_cta?: boolean;
 }
 
 export interface Page extends CosmicObject {

@@ -84,7 +84,8 @@ export async function getAllVideos(): Promise<Video[]> {
     const response = await cosmic.objects
       .find({ type: 'videos' })
       .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1);
+      .depth(1)
+      .sort('created_at');
     return response.objects || [];
   } catch (error: any) {
     if (error.status === 404) {
@@ -132,7 +133,8 @@ export async function getAllBlogPosts(): Promise<BlogPost[]> {
     const response = await cosmic.objects
       .find({ type: 'blog-posts' })
       .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1);
+      .depth(1)
+      .sort('created_at');
     return response.objects || [];
   } catch (error: any) {
     if (error.status === 404) {

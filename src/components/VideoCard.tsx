@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { Play } from 'lucide-react';
+import Link from 'next/link';
 import type { Video } from '@/types/cosmic';
 
 interface VideoCardProps {
   video: Video;
+  showFullPlayer?: boolean;
 }
 
 // Extract YouTube video ID from URL
@@ -15,7 +17,7 @@ function getYouTubeVideoId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-export default function VideoCard({ video }: VideoCardProps): JSX.Element {
+export default function VideoCard({ video, showFullPlayer = false }: VideoCardProps): JSX.Element {
   const [isPlaying, setIsPlaying] = useState(false);
   const { metadata } = video;
   const videoId: string | null = getYouTubeVideoId(metadata.video_url);
@@ -34,16 +36,16 @@ export default function VideoCard({ video }: VideoCardProps): JSX.Element {
   return (
     <div className="card group overflow-hidden">
       <div className="aspect-video relative overflow-hidden bg-gray-900">
-        {!isPlaying ? (
+        {!isPlaying || !showFullPlayer ? (
           <>
             <img 
               src={thumbnailUrl}
-              alt={metadata.video_title}
+              alt={metadata.video_title || 'Video thumbnail'}
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center group-hover:bg-opacity-40 transition-all duration-300">
               <button 
-                onClick={handlePlay}
+                onClick={showFullPlayer ? handlePlay : undefined}
                 className="w-16 h-16 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-300"
                 aria-label="Play video"
               >
@@ -56,26 +58,39 @@ export default function VideoCard({ video }: VideoCardProps): JSX.Element {
               </div>
             )}
           </>
-        ) : videoId ? (
-          <iframe
-            src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-            title={metadata.video_title}
-            className="w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-200">
-            <p className="text-gray-500">Video not available</p>
-          </div>
+          <>
+            {videoId ? (
+              <iframe
+                src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                title={metadata.video_title || 'Video'}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                <p className="text-gray-500">Video not available</p>
+              </div>
+            )}
+          </>
         )}
       </div>
       
       <div className="p-6">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-lg font-semibold text-gray-900">
-            {metadata.video_title}
-          </h3>
+          {showFullPlayer ? (
+            <h3 className="text-lg font-semibold text-gray-900">
+              {metadata.video_title || 'Untitled Video'}
+            </h3>
+          ) : (
+            <Link 
+              href={`/videos/${video.slug}`}
+              className="text-lg font-semibold text-gray-900 hover:text-primary-600 transition-colors"
+            >
+              {metadata.video_title || 'Untitled Video'}
+            </Link>
+          )}
           {metadata.featured_video && (
             <span className="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-1 rounded-full">
               Featured
@@ -83,7 +98,7 @@ export default function VideoCard({ video }: VideoCardProps): JSX.Element {
           )}
         </div>
         
-        {metadata.video_type && (
+        {metadata.video_type?.value && (
           <span className="inline-block text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded mb-3">
             {metadata.video_type.value}
           </span>
@@ -101,14 +116,14 @@ export default function VideoCard({ video }: VideoCardProps): JSX.Element {
               {metadata.duration}
             </span>
           )}
-          <a 
-            href={metadata.video_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary-600 hover:text-primary-700 text-sm font-medium"
-          >
-            Watch on Platform →
-          </a>
+          {!showFullPlayer && (
+            <Link 
+              href={`/videos/${video.slug}`}
+              className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+            >
+              Watch Video →
+            </Link>
+          )}
         </div>
       </div>
     </div>
