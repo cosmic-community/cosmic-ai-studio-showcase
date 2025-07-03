@@ -54,14 +54,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps): Promi
                 </p>
               )}
               <div className="flex flex-wrap justify-center items-center gap-4 text-sm text-gray-500">
-                {post.metadata.author && (
-                  <span>By {post.metadata.author}</span>
+                {post.metadata.author_name && (
+                  <span>By {post.metadata.author_name}</span>
                 )}
-                {post.metadata.published_date && (
-                  <span>{new Date(post.metadata.published_date).toLocaleDateString()}</span>
+                {post.created_at && (
+                  <span>{new Date(post.created_at).toLocaleDateString()}</span>
                 )}
-                {post.metadata.read_time && (
-                  <span>{post.metadata.read_time} min read</span>
+                {post.metadata.reading_time && (
+                  <span>{post.metadata.reading_time}</span>
                 )}
               </div>
             </header>
@@ -90,17 +90,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps): Promi
                 )}
               </div>
 
-              {/* Tags */}
-              {post.metadata.tags && post.metadata.tags.length > 0 && (
+              {/* Category */}
+              {post.metadata.category && (
                 <div className="mt-8 pt-8 border-t border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Tags</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {post.metadata.tags.map((tag: string, index: number) => (
-                      <span key={index} className="bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Category</h3>
+                  <span className="bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm">
+                    {typeof post.metadata.category === 'object' ? post.metadata.category.value : post.metadata.category}
+                  </span>
                 </div>
               )}
             </div>
