@@ -1,9 +1,10 @@
 // src/types/cosmic.ts
-// Base interface for all Cosmic objects
+
+// Base Cosmic object interface
 export interface CosmicObject {
   id: string;
-  title: string;
   slug: string;
+  title: string;
   status: string;
   created_at: string;
   modified_at: string;
@@ -11,13 +12,13 @@ export interface CosmicObject {
 }
 
 // Media file interface
-export interface CosmicMedia {
+export interface CosmicFile {
   url: string;
   imgix_url: string;
 }
 
 // Select dropdown value interface
-export interface CosmicSelectValue {
+export interface SelectDropdownValue {
   key: string;
   value: string;
 }
@@ -27,11 +28,11 @@ export interface ShowcaseProjectMetadata {
   project_name: string;
   creator_name?: string;
   project_description: string;
-  screenshot?: CosmicMedia;
-  additional_images?: CosmicMedia[];
+  screenshot?: CosmicFile;
+  additional_images?: CosmicFile[];
   live_url?: string;
   github_url?: string;
-  project_category?: CosmicSelectValue;
+  project_category?: SelectDropdownValue;
   tech_stack?: string[];
   development_time?: string;
   featured_project: boolean;
@@ -46,8 +47,8 @@ export interface VideoMetadata {
   video_title: string;
   video_description?: string;
   video_url: string;
-  thumbnail?: CosmicMedia;
-  video_type?: CosmicSelectValue;
+  thumbnail?: CosmicFile;
+  video_type?: SelectDropdownValue;
   duration?: string;
   featured_video: boolean;
 }
@@ -56,13 +57,30 @@ export interface Video extends CosmicObject {
   metadata: VideoMetadata;
 }
 
+// Blog Post interfaces
+export interface BlogPostMetadata {
+  post_title: string;
+  excerpt?: string;
+  content: string;
+  featured_image?: CosmicFile;
+  category?: SelectDropdownValue;
+  author_name?: string;
+  author_photo?: CosmicFile;
+  reading_time?: string;
+  featured_post: boolean;
+}
+
+export interface BlogPost extends CosmicObject {
+  metadata: BlogPostMetadata;
+}
+
 // Use Case interfaces
 export interface UseCaseMetadata {
   use_case_title: string;
-  industry?: CosmicSelectValue;
-  target_audience?: CosmicSelectValue;
+  industry?: SelectDropdownValue;
+  target_audience?: SelectDropdownValue;
   description: string;
-  hero_image?: CosmicMedia;
+  hero_image?: CosmicFile;
   benefits?: Array<{
     title: string;
     description: string;
@@ -75,46 +93,13 @@ export interface UseCase extends CosmicObject {
   metadata: UseCaseMetadata;
 }
 
-// Blog Post interfaces
-export interface BlogPostMetadata {
-  post_title: string;
-  excerpt?: string;
-  content: string;
-  featured_image?: CosmicMedia;
-  category?: CosmicSelectValue;
-  author_name?: string;
-  author_photo?: CosmicMedia;
-  reading_time?: string;
-  featured_post: boolean;
-}
-
-export interface BlogPost extends CosmicObject {
-  metadata: BlogPostMetadata;
-}
-
-// Testimonial interfaces
-export interface TestimonialMetadata {
-  customer_name: string;
-  customer_title?: string;
-  company_name?: string;
-  customer_photo?: CosmicMedia;
-  company_logo?: CosmicMedia;
-  testimonial_text: string;
-  rating?: CosmicSelectValue;
-  use_case_category?: CosmicSelectValue;
-}
-
-export interface Testimonial extends CosmicObject {
-  metadata: TestimonialMetadata;
-}
-
 // Page interfaces
 export interface PageMetadata {
   page_title: string;
   meta_description?: string;
   hero_headline?: string;
   hero_subheadline?: string;
-  hero_background?: CosmicMedia;
+  hero_background?: CosmicFile;
   primary_cta_text?: string;
   primary_cta_link?: string;
   page_content?: string;
@@ -130,15 +115,28 @@ export interface Page extends CosmicObject {
   metadata: PageMetadata;
 }
 
-// API Response interfaces
-export interface CosmicResponse<T> {
-  objects?: T[];
-  object?: T;
-  total?: number;
+// Testimonial interfaces
+export interface TestimonialMetadata {
+  customer_name: string;
+  customer_title?: string;
+  company_name?: string;
+  customer_photo?: CosmicFile;
+  company_logo?: CosmicFile;
+  testimonial_text: string;
+  rating?: SelectDropdownValue;
+  use_case_category?: SelectDropdownValue;
 }
 
-// Error interface for Cosmic API
-export interface CosmicError {
-  status?: number;
-  message?: string;
+export interface Testimonial extends CosmicObject {
+  metadata: TestimonialMetadata;
+}
+
+// API Response interfaces
+export interface CosmicResponse<T> {
+  objects: T[];
+  total: number;
+}
+
+export interface CosmicSingleResponse<T> {
+  object: T;
 }

@@ -1,46 +1,36 @@
+// src/lib/cosmic.ts
 import { createBucketClient } from '@cosmicjs/sdk';
 import type {
   ShowcaseProject,
   Video,
-  UseCase,
   BlogPost,
-  Testimonial,
+  UseCase,
   Page,
-  CosmicError
+  Testimonial,
+  CosmicResponse,
+  CosmicSingleResponse
 } from '@/types/cosmic';
 
 // Initialize Cosmic client
 const cosmic = createBucketClient({
-  bucketSlug: process.env.COSMIC_BUCKET_SLUG || '',
-  readKey: process.env.COSMIC_READ_KEY || '',
+  bucketSlug: process.env.COSMIC_BUCKET_SLUG || 'built-with-cosmic-ai-studio-production',
+  readKey: process.env.COSMIC_READ_KEY || 'CuzQZ5x8UcDtLFf5JUDwjcEjB0GLxMMs1xCya14MPyGbGNcP93',
 });
 
-// Error handler for empty results
-function handleCosmicError(error: CosmicError): any[] {
-  if (error?.status === 404) {
-    return [];
-  }
-  throw error;
-}
-
-// Single object error handler
-function handleSingleObjectError(error: CosmicError): null {
-  if (error?.status === 404) {
-    return null;
-  }
-  throw error;
-}
-
 // Showcase Projects
-export async function getShowcaseProjects(): Promise<ShowcaseProject[]> {
+export async function getShowcaseProjects(limit = 100): Promise<ShowcaseProject[]> {
   try {
     const response = await cosmic.objects
       .find({ type: 'showcase-projects' })
-      .props(['id', 'title', 'slug', 'metadata', 'status'])
-      .depth(1);
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1)
+      .limit(limit);
     return response.objects as ShowcaseProject[];
-  } catch (error) {
-    return handleCosmicError(error as CosmicError);
+  } catch (error: any) {
+    if (error.status === 404) {
+      return [];
+    }
+    throw error;
   }
 }
 
@@ -51,36 +41,31 @@ export async function getFeaturedProjects(): Promise<ShowcaseProject[]> {
         type: 'showcase-projects',
         'metadata.featured_project': true 
       })
-      .props(['id', 'title', 'slug', 'metadata', 'status'])
+      .props(['id', 'title', 'slug', 'metadata'])
       .depth(1);
     return response.objects as ShowcaseProject[];
-  } catch (error) {
-    return handleCosmicError(error as CosmicError);
-  }
-}
-
-export async function getProjectBySlug(slug: string): Promise<ShowcaseProject | null> {
-  try {
-    const response = await cosmic.objects
-      .findOne({ type: 'showcase-projects', slug })
-      .props(['id', 'title', 'slug', 'metadata', 'status'])
-      .depth(1);
-    return response.object as ShowcaseProject;
-  } catch (error) {
-    return handleSingleObjectError(error as CosmicError);
+  } catch (error: any) {
+    if (error.status === 404) {
+      return [];
+    }
+    throw error;
   }
 }
 
 // Videos
-export async function getVideos(): Promise<Video[]> {
+export async function getVideos(limit = 100): Promise<Video[]> {
   try {
     const response = await cosmic.objects
       .find({ type: 'videos' })
-      .props(['id', 'title', 'slug', 'metadata', 'status'])
-      .depth(1);
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1)
+      .limit(limit);
     return response.objects as Video[];
-  } catch (error) {
-    return handleCosmicError(error as CosmicError);
+  } catch (error: any) {
+    if (error.status === 404) {
+      return [];
+    }
+    throw error;
   }
 }
 
@@ -91,49 +76,31 @@ export async function getFeaturedVideos(): Promise<Video[]> {
         type: 'videos',
         'metadata.featured_video': true 
       })
-      .props(['id', 'title', 'slug', 'metadata', 'status'])
+      .props(['id', 'title', 'slug', 'metadata'])
       .depth(1);
     return response.objects as Video[];
-  } catch (error) {
-    return handleCosmicError(error as CosmicError);
-  }
-}
-
-// Use Cases
-export async function getUseCases(): Promise<UseCase[]> {
-  try {
-    const response = await cosmic.objects
-      .find({ type: 'use-cases' })
-      .props(['id', 'title', 'slug', 'metadata', 'status'])
-      .depth(1);
-    return response.objects as UseCase[];
-  } catch (error) {
-    return handleCosmicError(error as CosmicError);
-  }
-}
-
-export async function getUseCaseBySlug(slug: string): Promise<UseCase | null> {
-  try {
-    const response = await cosmic.objects
-      .findOne({ type: 'use-cases', slug })
-      .props(['id', 'title', 'slug', 'metadata', 'status'])
-      .depth(1);
-    return response.object as UseCase;
-  } catch (error) {
-    return handleSingleObjectError(error as CosmicError);
+  } catch (error: any) {
+    if (error.status === 404) {
+      return [];
+    }
+    throw error;
   }
 }
 
 // Blog Posts
-export async function getBlogPosts(): Promise<BlogPost[]> {
+export async function getBlogPosts(limit = 100): Promise<BlogPost[]> {
   try {
     const response = await cosmic.objects
       .find({ type: 'blog-posts' })
-      .props(['id', 'title', 'slug', 'metadata', 'status'])
-      .depth(1);
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1)
+      .limit(limit);
     return response.objects as BlogPost[];
-  } catch (error) {
-    return handleCosmicError(error as CosmicError);
+  } catch (error: any) {
+    if (error.status === 404) {
+      return [];
+    }
+    throw error;
   }
 }
 
@@ -144,56 +111,78 @@ export async function getFeaturedBlogPosts(): Promise<BlogPost[]> {
         type: 'blog-posts',
         'metadata.featured_post': true 
       })
-      .props(['id', 'title', 'slug', 'metadata', 'status'])
+      .props(['id', 'title', 'slug', 'metadata'])
       .depth(1);
     return response.objects as BlogPost[];
-  } catch (error) {
-    return handleCosmicError(error as CosmicError);
+  } catch (error: any) {
+    if (error.status === 404) {
+      return [];
+    }
+    throw error;
   }
 }
 
-export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+// Use Cases
+export async function getUseCases(limit = 100): Promise<UseCase[]> {
   try {
     const response = await cosmic.objects
-      .findOne({ type: 'blog-posts', slug })
-      .props(['id', 'title', 'slug', 'metadata', 'status'])
-      .depth(1);
-    return response.object as BlogPost;
-  } catch (error) {
-    return handleSingleObjectError(error as CosmicError);
-  }
-}
-
-// Testimonials
-export async function getTestimonials(): Promise<Testimonial[]> {
-  try {
-    const response = await cosmic.objects
-      .find({ type: 'testimonials' })
-      .props(['id', 'title', 'slug', 'metadata', 'status'])
-      .depth(1);
-    return response.objects as Testimonial[];
-  } catch (error) {
-    return handleCosmicError(error as CosmicError);
+      .find({ type: 'use-cases' })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1)
+      .limit(limit);
+    return response.objects as UseCase[];
+  } catch (error: any) {
+    if (error.status === 404) {
+      return [];
+    }
+    throw error;
   }
 }
 
 // Pages
+export async function getPages(): Promise<Page[]> {
+  try {
+    const response = await cosmic.objects
+      .find({ type: 'pages' })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1);
+    return response.objects as Page[];
+  } catch (error: any) {
+    if (error.status === 404) {
+      return [];
+    }
+    throw error;
+  }
+}
+
 export async function getPageBySlug(slug: string): Promise<Page | null> {
   try {
     const response = await cosmic.objects
       .findOne({ type: 'pages', slug })
-      .props(['id', 'title', 'slug', 'metadata', 'status'])
+      .props(['id', 'title', 'slug', 'metadata'])
       .depth(1);
     return response.object as Page;
-  } catch (error) {
-    return handleSingleObjectError(error as CosmicError);
+  } catch (error: any) {
+    if (error.status === 404) {
+      return null;
+    }
+    throw error;
   }
 }
 
-export async function getHomepage(): Promise<Page | null> {
-  return getPageBySlug('homepage');
-}
-
-export async function getAboutPage(): Promise<Page | null> {
-  return getPageBySlug('about');
+// Testimonials
+export async function getTestimonials(limit = 100): Promise<Testimonial[]> {
+  try {
+    const response = await cosmic.objects
+      .find({ type: 'testimonials' })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1)
+      .limit(limit);
+    return response.objects as Testimonial[];
+  } catch (error: any) {
+    if (error.status === 404) {
+      return [];
+    }
+    throw error;
+  }
 }
