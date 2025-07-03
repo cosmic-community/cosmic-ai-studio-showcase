@@ -17,7 +17,7 @@ export default function BlogCard({ post }: BlogCardProps): JSX.Element {
             `${metadata.featured_image.imgix_url}?w=600&h=400&fit=crop&auto=format,compress` : 
             defaultImage
           }
-          alt={metadata.post_title}
+          alt={metadata.post_title || post.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
       </div>
@@ -38,7 +38,7 @@ export default function BlogCard({ post }: BlogCardProps): JSX.Element {
         
         <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
           <Link href={`/blog/${post.slug}`}>
-            {metadata.post_title}
+            {metadata.post_title || post.title}
           </Link>
         </h3>
         

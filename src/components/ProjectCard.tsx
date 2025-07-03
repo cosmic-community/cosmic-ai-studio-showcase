@@ -17,7 +17,7 @@ export default function ProjectCard({ project }: ProjectCardProps): JSX.Element 
             `${metadata.screenshot.imgix_url}?w=600&h=400&fit=crop&auto=format,compress` : 
             defaultImage
           }
-          alt={metadata.project_name}
+          alt={metadata.project_name || project.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
       </div>
@@ -25,7 +25,7 @@ export default function ProjectCard({ project }: ProjectCardProps): JSX.Element 
       <div className="p-6">
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-lg font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
-            {metadata.project_name}
+            {metadata.project_name || project.title}
           </h3>
           {metadata.featured_project && (
             <span className="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-1 rounded-full">
@@ -40,9 +40,11 @@ export default function ProjectCard({ project }: ProjectCardProps): JSX.Element 
           </p>
         )}
         
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-          {metadata.project_description}
-        </p>
+        {metadata.project_description && (
+          <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+            {metadata.project_description}
+          </p>
+        )}
         
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">

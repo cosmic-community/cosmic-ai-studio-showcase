@@ -8,7 +8,7 @@ export default function TestimonialCard({ testimonial }: TestimonialCardProps): 
   const { metadata } = testimonial;
   const defaultAvatar = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&auto=format,compress";
 
-  // Convert rating key to number of stars
+  // Convert rating to number of stars
   const rating = metadata.rating ? parseInt(metadata.rating.key) : 5;
   const stars = Array.from({ length: 5 }, (_, i) => i < rating);
 
