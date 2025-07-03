@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import { getVideoBySlug, getAllVideos } from '@/lib/cosmic';
-import VideoCard from '@/components/VideoCard';
 import type { Video } from '@/types/cosmic';
 
 interface VideoPageProps {
@@ -38,6 +37,14 @@ export default async function VideoPage({ params }: VideoPageProps): Promise<JSX
     notFound();
   }
 
+  // Extract YouTube video ID from URL
+  const getYouTubeId = (url: string) => {
+    const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    return match ? match[1] : null;
+  };
+
+  const videoId = getYouTubeId(video.metadata.video_url);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Video Section */}
@@ -46,7 +53,24 @@ export default async function VideoPage({ params }: VideoPageProps): Promise<JSX
           <div className="max-w-4xl mx-auto">
             {/* Video Player */}
             <div className="mb-8">
-              <VideoCard video={video} showFullPlayer={true} />
+              <div className="bg-white rounded-lg overflow-hidden shadow-sm">
+                {videoId ? (
+                  <div className="relative aspect-video">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${videoId}`}
+                      title={video.metadata.video_title || video.title}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      className="absolute inset-0 w-full h-full"
+                    />
+                  </div>
+                ) : (
+                  <div className="aspect-video bg-gray-100 flex items-center justify-center">
+                    <p className="text-gray-500">Video not available</p>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Video Info */}
