@@ -1,3 +1,4 @@
+// src/components/VideoCard.tsx
 'use client';
 
 import { useState } from 'react';
@@ -18,7 +19,7 @@ function getYouTubeVideoId(url: string): string | null {
 export default function VideoCard({ video }: VideoCardProps): JSX.Element {
   const [isPlaying, setIsPlaying] = useState(false);
   const { metadata } = video;
-  const videoId = getYouTubeVideoId(metadata.video_url);
+  const videoId: string | null = getYouTubeVideoId(metadata.video_url);
   const defaultThumbnail = "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=600&h=400&fit=crop&auto=format,compress";
   
   const thumbnailUrl = metadata.thumbnail?.imgix_url 

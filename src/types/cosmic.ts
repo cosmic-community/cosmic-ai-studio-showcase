@@ -1,3 +1,4 @@
+// src/types/cosmic.ts
 // Base interface for all Cosmic objects
 export interface CosmicObject {
   id: string;
