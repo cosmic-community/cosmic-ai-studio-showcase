@@ -1,24 +1,22 @@
-// src/types/cosmic.ts
-
-// Base Cosmic object interface
+// Cosmic CMS object type interfaces
 export interface CosmicObject {
   id: string;
-  slug: string;
   title: string;
+  slug: string;
   status: string;
   created_at: string;
   modified_at: string;
-  metadata: Record<string, any>;
+  thumbnail?: string;
 }
 
-// Media file interface
+// Base interface for file objects from Cosmic
 export interface CosmicFile {
   url: string;
   imgix_url: string;
 }
 
-// Select dropdown value interface
-export interface SelectDropdownValue {
+// Base interface for select dropdown values
+export interface SelectValue {
   key: string;
   value: string;
 }
@@ -32,7 +30,7 @@ export interface ShowcaseProjectMetadata {
   additional_images?: CosmicFile[];
   live_url?: string;
   github_url?: string;
-  project_category?: SelectDropdownValue;
+  project_category?: SelectValue;
   tech_stack?: string[];
   development_time?: string;
   featured_project: boolean;
@@ -48,7 +46,7 @@ export interface VideoMetadata {
   video_description?: string;
   video_url: string;
   thumbnail?: CosmicFile;
-  video_type?: SelectDropdownValue;
+  video_type?: SelectValue;
   duration?: string;
   featured_video: boolean;
 }
@@ -63,7 +61,7 @@ export interface BlogPostMetadata {
   excerpt?: string;
   content: string;
   featured_image?: CosmicFile;
-  category?: SelectDropdownValue;
+  category?: SelectValue;
   author_name?: string;
   author_photo?: CosmicFile;
   reading_time?: string;
@@ -77,8 +75,8 @@ export interface BlogPost extends CosmicObject {
 // Use Case interfaces
 export interface UseCaseMetadata {
   use_case_title: string;
-  industry?: SelectDropdownValue;
-  target_audience?: SelectDropdownValue;
+  industry?: SelectValue;
+  target_audience?: SelectValue;
   description: string;
   hero_image?: CosmicFile;
   benefits?: Array<{
@@ -123,8 +121,8 @@ export interface TestimonialMetadata {
   customer_photo?: CosmicFile;
   company_logo?: CosmicFile;
   testimonial_text: string;
-  rating?: SelectDropdownValue;
-  use_case_category?: SelectDropdownValue;
+  rating?: SelectValue;
+  use_case_category?: SelectValue;
 }
 
 export interface Testimonial extends CosmicObject {
