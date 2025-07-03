@@ -5,6 +5,7 @@ import type { Page, ShowcaseProject, BlogPost, Video, Testimonial } from '@/type
 const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG || '',
   readKey: process.env.COSMIC_READ_KEY || '',
+  apiEnvironmnet: "staging",
 });
 
 // Helper function to handle API errors
