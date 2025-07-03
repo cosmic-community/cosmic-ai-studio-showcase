@@ -1,140 +1,103 @@
-// src/types/cosmic.ts
-// Type definitions for Cosmic CMS objects
-
-export interface CosmicFile {
-  url: string;
-  imgix_url: string;
-}
-
-export interface SelectDropdownValue {
-  key: string;
-  value: string;
-}
-
-// Base Cosmic object structure
+// Base Cosmic Object interface
 export interface CosmicObject {
   id: string;
-  slug: string;
   title: string;
-  status: string;
+  slug: string;
+  status: 'published' | 'draft';
   created_at: string;
   modified_at: string;
+  thumbnail?: string;
 }
 
-// Showcase Project types
-export interface ShowcaseProjectMetadata {
-  project_name: string;
-  creator_name?: string;
-  project_description: string;
-  screenshot?: CosmicFile;
-  additional_images?: CosmicFile[];
-  live_url?: string;
-  github_url?: string;
-  project_category?: SelectDropdownValue;
-  tech_stack?: string[];
-  development_time?: string;
-  featured_project: boolean;
+// File/Media interface
+export interface CosmicFile {
+  name: string;
+  url: string;
+  imgix_url: string;
+  alt_text?: string;
 }
 
-export interface ShowcaseProject extends CosmicObject {
-  metadata: ShowcaseProjectMetadata;
-}
-
-// Video types
-export interface VideoMetadata {
-  video_title: string;
-  video_description?: string;
-  video_url: string;
-  thumbnail?: CosmicFile;
-  video_type?: SelectDropdownValue;
-  duration?: string;
-  featured_video: boolean;
-}
-
-export interface Video extends CosmicObject {
-  metadata: VideoMetadata;
-}
-
-// Blog Post types
-export interface BlogPostMetadata {
-  post_title: string;
-  excerpt?: string;
-  content: string;
-  featured_image?: CosmicFile;
-  category?: SelectDropdownValue;
-  author_name?: string;
-  author_photo?: CosmicFile;
-  reading_time?: string;
-  featured_post: boolean;
-}
-
-export interface BlogPost extends CosmicObject {
-  metadata: BlogPostMetadata;
-}
-
-// Testimonial types
-export interface TestimonialMetadata {
-  customer_name: string;
-  customer_title?: string;
-  company_name?: string;
-  customer_photo?: CosmicFile;
-  company_logo?: CosmicFile;
-  testimonial_text: string;
-  rating?: SelectDropdownValue;
-  use_case_category?: SelectDropdownValue;
-}
-
-export interface Testimonial extends CosmicObject {
-  metadata: TestimonialMetadata;
-}
-
-// Use Case types
-export interface UseCaseMetadata {
-  use_case_title: string;
-  industry?: SelectDropdownValue;
-  target_audience?: SelectDropdownValue;
-  description: string;
-  hero_image?: CosmicFile;
-  benefits?: Array<{
-    title: string;
-    description: string;
-  }>;
-  ai_features_used?: string[];
-  implementation_time?: string;
-}
-
-export interface UseCase extends CosmicObject {
-  metadata: UseCaseMetadata;
-}
-
-// Page types
-export interface PageMetadata {
-  page_title: string;
-  meta_description?: string;
-  hero_headline?: string;
-  hero_subheadline?: string;
-  hero_background?: CosmicFile;
-  primary_cta_text?: string;
-  primary_cta_link?: string;
-  page_content?: string;
-  features_section?: Array<{
-    title: string;
-    description: string;
-    icon: string;
-  }>;
-  show_build_cta?: boolean;
-}
-
+// Page interface
 export interface Page extends CosmicObject {
-  metadata: PageMetadata;
+  type: 'pages';
+  metadata: {
+    hero_headline?: string;
+    hero_subheadline?: string;
+    hero_background?: CosmicFile;
+    primary_cta_text?: string;
+    primary_cta_link?: string;
+    secondary_cta_text?: string;
+    secondary_cta_link?: string;
+    content?: string;
+    seo_title?: string;
+    seo_description?: string;
+  };
 }
 
-// API Response types
-export interface CosmicApiResponse<T> {
-  objects: T[];
-  total: number;
+// Project interface
+export interface ShowcaseProject extends CosmicObject {
+  type: 'projects';
+  metadata: {
+    description?: string;
+    featured_image?: CosmicFile;
+    demo_url?: string;
+    github_url?: string;
+    technologies?: string[];
+    featured?: boolean;
+    content?: string;
+    category?: string;
+    difficulty?: 'Beginner' | 'Intermediate' | 'Advanced';
+  };
 }
 
-export interface CosmicSingleResponse<T> {
-  object: T;
+// Blog Post interface
+export interface BlogPost extends CosmicObject {
+  type: 'posts';
+  metadata: {
+    excerpt?: string;
+    content?: string;
+    featured_image?: CosmicFile;
+    author?: string;
+    published_date?: string;
+    read_time?: number;
+    tags?: string[];
+    category?: string;
+    featured?: boolean;
+    seo_title?: string;
+    seo_description?: string;
+  };
 }
+
+// Video interface
+export interface Video extends CosmicObject {
+  type: 'videos';
+  metadata: {
+    video_title?: string;
+    video_description?: string;
+    video_url: string;
+    thumbnail?: CosmicFile;
+    duration?: string;
+    video_type?: {
+      key: string;
+      value: string;
+    };
+    featured?: boolean;
+  };
+}
+
+// Testimonial interface
+export interface Testimonial extends CosmicObject {
+  type: 'testimonials';
+  metadata: {
+    quote: string;
+    author_name: string;
+    author_title?: string;
+    author_company?: string;
+    author_image?: CosmicFile;
+    rating?: number;
+    featured?: boolean;
+  };
+}
+
+// Union type for all content types
+export type CosmicContent = Page | ShowcaseProject | BlogPost | Video | Testimonial;
