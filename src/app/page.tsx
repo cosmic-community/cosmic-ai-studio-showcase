@@ -1,10 +1,9 @@
 import { Suspense } from 'react';
-import { getHomepage, getFeaturedProjects, getFeaturedVideos, getFeaturedBlogPosts, getTestimonials } from '@/lib/cosmic';
+import { getHomepage, getFeaturedProjects, getFeaturedBlogPosts, getTestimonials } from '@/lib/cosmic';
 import ProjectCard from '@/components/ProjectCard';
-import VideoCard from '@/components/VideoCard';
 import BlogCard from '@/components/BlogCard';
 import TestimonialCard from '@/components/TestimonialCard';
-import type { ShowcaseProject, Video, BlogPost, Testimonial, Page } from '@/types/cosmic';
+import type { ShowcaseProject, BlogPost, Testimonial, Page } from '@/types/cosmic';
 
 // Loading components
 function LoadingGrid(): JSX.Element {
@@ -52,10 +51,10 @@ function HeroSection({ page }: { page: Page | null }): JSX.Element {
               {page?.metadata.primary_cta_text || 'Explore Projects'}
             </a>
             <a 
-              href="#videos" 
+              href="#blog" 
               className="btn-secondary text-lg"
             >
-              Watch Videos
+              Read Blog
             </a>
           </div>
         </div>
@@ -98,46 +97,12 @@ async function FeaturedProjectsSection(): Promise<JSX.Element> {
   );
 }
 
-// Featured Videos Section
-async function FeaturedVideosSection(): Promise<JSX.Element> {
-  const videos = await getFeaturedVideos();
-  
-  return (
-    <section id="videos" className="py-16 bg-gray-50">
-      <div className="container-custom">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Featured Videos
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Learn how to build with Cosmic AI Studio through our video tutorials
-          </p>
-        </div>
-        
-        <Suspense fallback={<LoadingGrid />}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {videos && videos.length > 0 ? (
-              videos.slice(0, 2).map((video: Video) => (
-                <VideoCard key={video.id} video={video} />
-              ))
-            ) : (
-              <div className="col-span-full text-center py-12">
-                <p className="text-gray-500">No featured videos available.</p>
-              </div>
-            )}
-          </div>
-        </Suspense>
-      </div>
-    </section>
-  );
-}
-
 // Latest Blog Posts Section
 async function LatestBlogSection(): Promise<JSX.Element> {
   const posts = await getFeaturedBlogPosts();
   
   return (
-    <section className="py-16 bg-white">
+    <section id="blog" className="py-16 bg-gray-50">
       <div className="container-custom">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -171,7 +136,7 @@ async function TestimonialsSection(): Promise<JSX.Element> {
   const testimonials = await getTestimonials();
   
   return (
-    <section className="py-16 bg-primary-50">
+    <section className="py-16 bg-white">
       <div className="container-custom">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -238,7 +203,6 @@ export default async function HomePage(): Promise<JSX.Element> {
     <>
       <HeroSection page={homepage} />
       <FeaturedProjectsSection />
-      <FeaturedVideosSection />
       <LatestBlogSection />
       <TestimonialsSection />
       <CTASection />
