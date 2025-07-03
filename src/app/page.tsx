@@ -82,7 +82,7 @@ async function FeaturedProjectsSection(): Promise<JSX.Element> {
         
         <Suspense fallback={<LoadingGrid />}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects?.length > 0 ? (
+            {projects && projects.length > 0 ? (
               projects.map((project: ShowcaseProject) => (
                 <ProjectCard key={project.id} project={project} />
               ))
@@ -116,7 +116,7 @@ async function FeaturedVideosSection(): Promise<JSX.Element> {
         
         <Suspense fallback={<LoadingGrid />}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {videos?.length > 0 ? (
+            {videos && videos.length > 0 ? (
               videos.slice(0, 2).map((video: Video) => (
                 <VideoCard key={video.id} video={video} />
               ))
@@ -150,7 +150,7 @@ async function LatestBlogSection(): Promise<JSX.Element> {
         
         <Suspense fallback={<LoadingGrid />}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {posts?.length > 0 ? (
+            {posts && posts.length > 0 ? (
               posts.slice(0, 3).map((post: BlogPost) => (
                 <BlogCard key={post.id} post={post} />
               ))
@@ -184,7 +184,7 @@ async function TestimonialsSection(): Promise<JSX.Element> {
         
         <Suspense fallback={<LoadingGrid />}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {testimonials?.length > 0 ? (
+            {testimonials && testimonials.length > 0 ? (
               testimonials.slice(0, 2).map((testimonial: Testimonial) => (
                 <TestimonialCard key={testimonial.id} testimonial={testimonial} />
               ))

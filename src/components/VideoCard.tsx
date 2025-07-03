@@ -1,4 +1,3 @@
-// src/components/VideoCard.tsx
 'use client';
 
 import { useState } from 'react';
