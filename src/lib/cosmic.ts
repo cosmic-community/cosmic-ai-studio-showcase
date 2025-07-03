@@ -1,172 +1,171 @@
 import { createBucketClient } from '@cosmicjs/sdk';
-import type { 
-  ShowcaseProject, 
-  Video, 
-  BlogPost, 
-  UseCase, 
-  Page, 
+import type {
+  ShowcaseProject,
+  Video,
+  BlogPost,
   Testimonial,
-  CosmicResponse 
+  UseCase,
+  Page,
+  CosmicApiResponse
 } from '@/types/cosmic';
 
 // Initialize Cosmic client
 const cosmic = createBucketClient({
-  bucketSlug: process.env.COSMIC_BUCKET_SLUG!,
-  readKey: process.env.COSMIC_READ_KEY!,
+  bucketSlug: process.env.COSMIC_BUCKET_SLUG || 'built-with-cosmic-ai-studio-production',
+  readKey: process.env.COSMIC_READ_KEY || 'CuzQZ5x8UcDtLFf5JUDwjcEjB0GLxMMs1xCya14MPyGbGNcP93',
 });
 
-// Showcase Projects
-export async function getShowcaseProjects(): Promise<ShowcaseProject[]> {
+// Generic error handler for Cosmic API
+async function handleCosmicRequest<T>(request: Promise<any>): Promise<T | null> {
   try {
-    const response = await cosmic.objects
-      .find({ type: 'showcase-projects' })
-      .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1);
-    return response.objects as ShowcaseProject[];
-  } catch (error) {
-    console.error('Error fetching showcase projects:', error);
-    return [];
+    const response = await request;
+    return response;
+  } catch (error: any) {
+    if (error.status === 404) {
+      // Handle empty results
+      return null;
+    }
+    console.error('Cosmic API Error:', error);
+    throw error;
   }
 }
 
-export async function getFeaturedProjects(): Promise<ShowcaseProject[]> {
-  try {
-    const response = await cosmic.objects
-      .find({ 
-        type: 'showcase-projects',
-        'metadata.featured_project': true 
-      })
+// Showcase Projects
+export async function getFeaturedProjects(): Promise<ShowcaseProject[] | null> {
+  const response = await handleCosmicRequest<CosmicApiResponse<ShowcaseProject>>(
+    cosmic.objects
+      .find({ type: 'showcase-projects', 'metadata.featured_project': true })
       .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1);
-    return response.objects as ShowcaseProject[];
-  } catch (error) {
-    console.error('Error fetching featured projects:', error);
-    return [];
-  }
+      .depth(1)
+  );
+  return response?.objects || null;
+}
+
+export async function getAllProjects(): Promise<ShowcaseProject[] | null> {
+  const response = await handleCosmicRequest<CosmicApiResponse<ShowcaseProject>>(
+    cosmic.objects
+      .find({ type: 'showcase-projects' })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1)
+  );
+  return response?.objects || null;
+}
+
+export async function getProjectBySlug(slug: string): Promise<ShowcaseProject | null> {
+  const response = await handleCosmicRequest<{ object: ShowcaseProject }>(
+    cosmic.objects
+      .findOne({ type: 'showcase-projects', slug })
+      .depth(1)
+  );
+  return response?.object || null;
 }
 
 // Videos
-export async function getVideos(): Promise<Video[]> {
-  try {
-    const response = await cosmic.objects
-      .find({ type: 'videos' })
+export async function getFeaturedVideos(): Promise<Video[] | null> {
+  const response = await handleCosmicRequest<CosmicApiResponse<Video>>(
+    cosmic.objects
+      .find({ type: 'videos', 'metadata.featured_video': true })
       .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1);
-    return response.objects as Video[];
-  } catch (error) {
-    console.error('Error fetching videos:', error);
-    return [];
-  }
+      .depth(1)
+  );
+  return response?.objects || null;
 }
 
-export async function getFeaturedVideos(): Promise<Video[]> {
-  try {
-    const response = await cosmic.objects
-      .find({ 
-        type: 'videos',
-        'metadata.featured_video': true 
-      })
+export async function getAllVideos(): Promise<Video[] | null> {
+  const response = await handleCosmicRequest<CosmicApiResponse<Video>>(
+    cosmic.objects
+      .find({ type: 'videos' })
       .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1);
-    return response.objects as Video[];
-  } catch (error) {
-    console.error('Error fetching featured videos:', error);
-    return [];
-  }
+      .depth(1)
+  );
+  return response?.objects || null;
+}
+
+export async function getVideoBySlug(slug: string): Promise<Video | null> {
+  const response = await handleCosmicRequest<{ object: Video }>(
+    cosmic.objects
+      .findOne({ type: 'videos', slug })
+      .depth(1)
+  );
+  return response?.object || null;
 }
 
 // Blog Posts
-export async function getBlogPosts(): Promise<BlogPost[]> {
-  try {
-    const response = await cosmic.objects
+export async function getFeaturedBlogPosts(): Promise<BlogPost[] | null> {
+  const response = await handleCosmicRequest<CosmicApiResponse<BlogPost>>(
+    cosmic.objects
+      .find({ type: 'blog-posts', 'metadata.featured_post': true })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1)
+  );
+  return response?.objects || null;
+}
+
+export async function getAllBlogPosts(): Promise<BlogPost[] | null> {
+  const response = await handleCosmicRequest<CosmicApiResponse<BlogPost>>(
+    cosmic.objects
       .find({ type: 'blog-posts' })
       .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1);
-    return response.objects as BlogPost[];
-  } catch (error) {
-    console.error('Error fetching blog posts:', error);
-    return [];
-  }
+      .depth(1)
+  );
+  return response?.objects || null;
 }
 
-export async function getFeaturedBlogPosts(): Promise<BlogPost[]> {
-  try {
-    const response = await cosmic.objects
-      .find({ 
-        type: 'blog-posts',
-        'metadata.featured_post': true 
-      })
-      .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1);
-    return response.objects as BlogPost[];
-  } catch (error) {
-    console.error('Error fetching featured blog posts:', error);
-    return [];
-  }
-}
-
-// Use Cases
-export async function getUseCases(): Promise<UseCase[]> {
-  try {
-    const response = await cosmic.objects
-      .find({ type: 'use-cases' })
-      .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1);
-    return response.objects as UseCase[];
-  } catch (error) {
-    console.error('Error fetching use cases:', error);
-    return [];
-  }
-}
-
-// Pages
-export async function getPage(slug: string): Promise<Page | null> {
-  try {
-    const response = await cosmic.objects
-      .findOne({ 
-        type: 'pages',
-        slug: slug 
-      })
-      .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1);
-    return response.object as Page;
-  } catch (error) {
-    console.error(`Error fetching page ${slug}:`, error);
-    return null;
-  }
-}
-
-export async function getHomepage(): Promise<Page | null> {
-  return getPage('homepage');
+export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  const response = await handleCosmicRequest<{ object: BlogPost }>(
+    cosmic.objects
+      .findOne({ type: 'blog-posts', slug })
+      .depth(1)
+  );
+  return response?.object || null;
 }
 
 // Testimonials
-export async function getTestimonials(): Promise<Testimonial[]> {
-  try {
-    const response = await cosmic.objects
+export async function getTestimonials(): Promise<Testimonial[] | null> {
+  const response = await handleCosmicRequest<CosmicApiResponse<Testimonial>>(
+    cosmic.objects
       .find({ type: 'testimonials' })
       .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1);
-    return response.objects as Testimonial[];
-  } catch (error) {
-    console.error('Error fetching testimonials:', error);
-    return [];
-  }
+      .depth(1)
+  );
+  return response?.objects || null;
 }
 
-// Generic fetch function for any object type
-export async function getObjects<T>(
-  type: string, 
-  query: Record<string, any> = {}
-): Promise<T[]> {
-  try {
-    const response = await cosmic.objects
-      .find({ type, ...query })
+// Use Cases
+export async function getUseCases(): Promise<UseCase[] | null> {
+  const response = await handleCosmicRequest<CosmicApiResponse<UseCase>>(
+    cosmic.objects
+      .find({ type: 'use-cases' })
       .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1);
-    return response.objects as T[];
-  } catch (error) {
-    console.error(`Error fetching ${type}:`, error);
-    return [];
-  }
+      .depth(1)
+  );
+  return response?.objects || null;
+}
+
+export async function getUseCaseBySlug(slug: string): Promise<UseCase | null> {
+  const response = await handleCosmicRequest<{ object: UseCase }>(
+    cosmic.objects
+      .findOne({ type: 'use-cases', slug })
+      .depth(1)
+  );
+  return response?.object || null;
+}
+
+// Pages
+export async function getHomepage(): Promise<Page | null> {
+  const response = await handleCosmicRequest<{ object: Page }>(
+    cosmic.objects
+      .findOne({ type: 'pages', slug: 'homepage' })
+      .depth(1)
+  );
+  return response?.object || null;
+}
+
+export async function getPageBySlug(slug: string): Promise<Page | null> {
+  const response = await handleCosmicRequest<{ object: Page }>(
+    cosmic.objects
+      .findOne({ type: 'pages', slug })
+      .depth(1)
+  );
+  return response?.object || null;
 }
