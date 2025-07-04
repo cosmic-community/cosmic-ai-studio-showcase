@@ -1,8 +1,11 @@
+// src/app/page.tsx
 import { Suspense } from 'react';
 import { getHomepage, getFeaturedProjects, getFeaturedBlogPosts, getTestimonials } from '@/lib/cosmic';
 import ProjectCard from '@/components/ProjectCard';
 import BlogCard from '@/components/BlogCard';
 import TestimonialCard from '@/components/TestimonialCard';
+import HeroSection from '@/components/HeroSection';
+import FeaturesSection from '@/components/FeaturesSection';
 import type { ShowcaseProject, BlogPost, Testimonial, Page } from '@/types/cosmic';
 
 // Loading components
@@ -20,46 +23,6 @@ function LoadingGrid(): JSX.Element {
         </div>
       ))}
     </div>
-  );
-}
-
-// Hero Section Component
-function HeroSection({ page }: { page: Page | null }): JSX.Element {
-  const defaultHeroImage = "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=600&fit=crop&auto=format,compress";
-  
-  return (
-    <section className="relative bg-gradient-to-br from-primary-50 via-white to-primary-50 py-20">
-      <div 
-        className="absolute inset-0 bg-cover bg-center opacity-10"
-        style={{
-          backgroundImage: `url(${page?.metadata.hero_background?.imgix_url || defaultHeroImage}?w=1200&h=600&fit=crop&auto=format,compress)`
-        }}
-      ></div>
-      <div className="relative container-custom">
-        <div className="text-center max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            {page?.metadata.hero_headline || 'Build Beautiful Websites with AI'}
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-            {page?.metadata.hero_subheadline || 'Cosmic AI Studio combines the power of headless CMS with intelligent AI tools. Create, manage, and deploy stunning websites faster than ever before.'}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
-              href={page?.metadata.primary_cta_link || '#projects'} 
-              className="btn-primary text-lg"
-            >
-              {page?.metadata.primary_cta_text || 'Explore Projects'}
-            </a>
-            <a 
-              href="#blog" 
-              className="btn-secondary text-lg"
-            >
-              Read Blog
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -92,6 +55,15 @@ async function FeaturedProjectsSection(): Promise<JSX.Element> {
             )}
           </div>
         </Suspense>
+        
+        <div className="text-center mt-12">
+          <a 
+            href="/projects" 
+            className="btn-primary"
+          >
+            View All Projects
+          </a>
+        </div>
       </div>
     </section>
   );
@@ -126,6 +98,15 @@ async function LatestBlogSection(): Promise<JSX.Element> {
             )}
           </div>
         </Suspense>
+        
+        <div className="text-center mt-12">
+          <a 
+            href="/blog" 
+            className="btn-primary"
+          >
+            Read More Articles
+          </a>
+        </div>
       </div>
     </section>
   );
@@ -202,6 +183,7 @@ export default async function HomePage(): Promise<JSX.Element> {
   return (
     <>
       <HeroSection page={homepage} />
+      <FeaturesSection features={homepage?.metadata.features_section} />
       <FeaturedProjectsSection />
       <LatestBlogSection />
       <TestimonialsSection />
