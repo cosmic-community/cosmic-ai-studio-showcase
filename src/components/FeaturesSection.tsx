@@ -1,68 +1,74 @@
-// src/components/FeaturesSection.tsx
-interface Feature {
-  title: string;
-  description: string;
-  icon: string;
-}
+import { Bot, Palette, Code, Zap, Shield, Globe } from 'lucide-react';
 
-interface FeaturesSectionProps {
-  title?: string;
-  subtitle?: string;
-  features?: Feature[];
-  className?: string;
-}
-
-const defaultFeatures: Feature[] = [
+const features = [
   {
-    title: "AI Content Generation",
-    description: "Create high-quality content with our intelligent writing assistant",
-    icon: "🤖"
+    icon: Bot,
+    title: 'AI Content Generation',
+    description: 'Create high-quality content with our intelligent writing assistant that understands your brand voice and audience.',
+    color: 'from-blue-500 to-cyan-500'
   },
   {
-    title: "Visual Page Builder",
-    description: "Drag and drop components to build pages visually",
-    icon: "🎨"
+    icon: Palette,
+    title: 'Visual Page Builder',
+    description: 'Design beautiful pages with our intuitive drag-and-drop interface. No coding required.',
+    color: 'from-purple-500 to-pink-500'
   },
   {
-    title: "Global CDN",
-    description: "Lightning-fast content delivery worldwide",
-    icon: "⚡"
+    icon: Code,
+    title: 'Developer APIs',
+    description: 'RESTful APIs and GraphQL endpoints for seamless integration with any tech stack.',
+    color: 'from-green-500 to-teal-500'
   },
   {
-    title: "Developer APIs",
-    description: "RESTful APIs and GraphQL for any tech stack",
-    icon: "⚙️"
+    icon: Zap,
+    title: 'Lightning Performance',
+    description: 'Global CDN, image optimization, and caching for blazing-fast load times worldwide.',
+    color: 'from-yellow-500 to-orange-500'
+  },
+  {
+    icon: Shield,
+    title: 'Enterprise Security',
+    description: 'Bank-level security with encrypted data, regular backups, and compliance certifications.',
+    color: 'from-red-500 to-pink-500'
+  },
+  {
+    icon: Globe,
+    title: 'Global Scale',
+    description: 'Built to handle millions of requests with 99.9% uptime guarantee and auto-scaling.',
+    color: 'from-indigo-500 to-purple-500'
   }
 ];
 
-export default function FeaturesSection({ 
-  title = "Why Choose Cosmic AI Studio?",
-  subtitle = "Experience the future of web development with our AI-powered platform",
-  features = defaultFeatures,
-  className = ""
-}: FeaturesSectionProps): JSX.Element {
+export default function FeaturesSection(): JSX.Element {
   return (
-    <section className={`py-16 bg-gray-50 ${className}`}>
+    <section className="py-20 lg:py-32 bg-white dark:bg-gray-900">
       <div className="container-custom">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            {title}
+        <div className="text-center mb-16">
+          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+            Everything You Need to Build
+            <span className="bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent"> Amazing Websites</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            {subtitle}
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            From AI-powered content creation to enterprise-grade infrastructure, 
+            we provide all the tools you need to succeed.
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <div key={index} className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
-              <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
-                <span className="text-2xl">{feature.icon}</span>
+            <div
+              key={index}
+              className="group p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-300 hover:shadow-xl dark:hover:shadow-2xl"
+            >
+              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                <feature.icon className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
                 {feature.title}
               </h3>
-              <p className="text-gray-600">
+              
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                 {feature.description}
               </p>
             </div>

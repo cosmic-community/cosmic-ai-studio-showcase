@@ -3,91 +3,131 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
-import ThemeToggle from '@/components/ThemeToggle';
+import ThemeToggle from './ThemeToggle';
 
 export default function Header(): JSX.Element {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const navigation = [
-    { name: 'Features', href: '#features' },
-    { name: 'Showcase', href: '#showcase' },
-    { name: 'Use Cases', href: '#use-cases' },
-    { name: 'Videos', href: '#videos' },
-    { name: 'Testimonials', href: '#testimonials' },
-  ];
+  const toggleMenu = (): void => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
-    <header className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+    <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-700">
       <div className="container-custom">
-        <div className="flex justify-between items-center py-4">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-purple-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold">AI</span>
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">C</span>
             </div>
-            <div className="text-xl font-bold text-gray-900 dark:text-white">
-              Cosmic <span className="text-primary-600">AI Studio</span>
-            </div>
+            <span className="text-xl font-bold text-gray-900 dark:text-white">
+              Cosmic AI Studio
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors duration-200"
-              >
-                {item.name}
-              </a>
-            ))}
-            <ThemeToggle />
-            <a
-              href="https://app.cosmicjs.com/signup"
-              className="bg-gradient-to-r from-primary-600 to-purple-600 hover:from-primary-700 hover:to-purple-700 text-white font-medium py-2 px-6 rounded-lg transition-all duration-200 transform hover:scale-105"
+            <Link
+              href="/"
+              className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors"
             >
-              Start Building
-            </a>
+              Home
+            </Link>
+            <Link
+              href="/showcase"
+              className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors"
+            >
+              Showcase
+            </Link>
+            <Link
+              href="/blog"
+              className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors"
+            >
+              Blog
+            </Link>
+            <Link
+              href="/about"
+              className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors"
+            >
+              About
+            </Link>
           </nav>
 
-          {/* Mobile menu button and theme toggle */}
+          {/* Theme Toggle and CTA */}
+          <div className="hidden md:flex items-center space-x-4">
+            <ThemeToggle />
+            <Link
+              href="https://app.cosmicjs.com/signup"
+              className="btn-primary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Get Started
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-3">
             <ThemeToggle />
             <button
-              type="button"
-              className="p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={toggleMenu}
+              className="p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label="Toggle menu"
             >
               {isMenuOpen ? (
-                <X className="h-6 w-6" />
+                <X className="w-6 h-6" />
               ) : (
-                <Menu className="h-6 w-6" />
+                <Menu className="w-6 h-6" />
               )}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200 dark:border-gray-700">
-            <nav className="flex flex-col space-y-4">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors"
+          <div className="md:hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+            <div className="py-4 space-y-2">
+              <Link
+                href="/"
+                className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <Link
+                href="/showcase"
+                className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Showcase
+              </Link>
+              <Link
+                href="/blog"
+                className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Blog
+              </Link>
+              <Link
+                href="/about"
+                className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About
+              </Link>
+              <div className="px-4 py-2">
+                <Link
+                  href="https://app.cosmicjs.com/signup"
+                  className="btn-primary w-full text-center inline-block"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {item.name}
-                </a>
-              ))}
-              <a
-                href="https://app.cosmicjs.com/signup"
-                className="bg-gradient-to-r from-primary-600 to-purple-600 text-white font-medium py-3 px-6 rounded-lg text-center"
-              >
-                Start Building
-              </a>
-            </nav>
+                  Get Started
+                </Link>
+              </div>
+            </div>
           </div>
         )}
       </div>

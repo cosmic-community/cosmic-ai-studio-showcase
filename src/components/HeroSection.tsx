@@ -1,107 +1,96 @@
-import type { Page } from '@/types/cosmic';
+import Link from 'next/link';
+import { ArrowRight, Sparkles, Zap, Globe } from 'lucide-react';
 
-interface HeroSectionProps {
-  page: Page | null;
-  title?: string;
-  subtitle?: string;
-  showCTA?: boolean;
-  backgroundImage?: string;
-  className?: string;
-}
-
-export default function HeroSection({ 
-  page, 
-  title, 
-  subtitle, 
-  showCTA = true,
-  backgroundImage,
-  className = ""
-}: HeroSectionProps): JSX.Element {
-  const defaultHeroImage = "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=600&fit=crop&auto=format,compress";
-  
-  const heroTitle = title || page?.metadata.hero_headline || 'Build Beautiful Websites with AI';
-  const heroSubtitle = subtitle || page?.metadata.hero_subheadline || 'Cosmic AI Studio combines the power of headless CMS with intelligent AI tools. Create, manage, and deploy stunning websites faster than ever before.';
-  const heroBg = backgroundImage || page?.metadata.hero_background?.imgix_url || defaultHeroImage;
-  
+export default function HeroSection(): JSX.Element {
   return (
-    <section className={`relative min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-purple-50 overflow-hidden ${className}`}>
-      {/* Background elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary-200/30 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-primary-100/20 to-purple-100/20 rounded-full blur-3xl"></div>
-      </div>
-      
-      {/* Content */}
-      <div className="relative container-custom py-20">
-        <div className="text-center max-w-5xl mx-auto">
+    <section className="relative py-20 lg:py-32 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-5 dark:opacity-10"></div>
+      <div className="absolute top-0 left-0 w-96 h-96 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-3xl"></div>
+
+      <div className="container-custom relative">
+        <div className="text-center max-w-4xl mx-auto">
           {/* Badge */}
-          <div className="inline-flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-2 mb-8 border border-gray-200/50">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-            <span className="text-sm font-medium text-gray-700">Now with Advanced AI Features</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-sm font-medium mb-8 border border-primary-200 dark:border-primary-800">
+            <Sparkles className="w-4 h-4" />
+            <span>Powered by AI</span>
           </div>
-          
+
           {/* Main headline */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-8 leading-tight">
-            Build{' '}
-            <span className="bg-gradient-to-r from-primary-600 via-purple-600 to-primary-600 bg-clip-text text-transparent animate-gradient-x">
-              Stunning
+          <h1 className="text-5xl lg:text-7xl font-bold mb-6">
+            <span className="bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
+              Build Beautiful
             </span>
             <br />
-            Websites with{' '}
-            <span className="bg-gradient-to-r from-purple-600 to-primary-600 bg-clip-text text-transparent">
-              AI
+            <span className="text-gray-900 dark:text-white">
+              Websites with AI
             </span>
           </h1>
-          
-          {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-gray-600 mb-12 leading-relaxed max-w-3xl mx-auto">
-            {heroSubtitle}
+
+          {/* Subheadline */}
+          <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-400 mb-10 max-w-3xl mx-auto leading-relaxed">
+            Cosmic AI Studio combines the power of headless CMS with intelligent AI tools. 
+            Create, manage, and deploy stunning websites faster than ever before.
           </p>
-          
-          {/* CTA Buttons */}
-          {showCTA && (
-            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
-              <a 
-                href={page?.metadata.primary_cta_link || 'https://app.cosmicjs.com/signup'} 
-                className="group relative bg-gradient-to-r from-primary-600 to-purple-600 hover:from-primary-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl text-lg"
-              >
-                <span className="relative z-10">
-                  {page?.metadata.primary_cta_text || 'Start Building with AI'}
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-white/0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </a>
-              <a 
-                href="#showcase" 
-                className="group bg-white/80 backdrop-blur-sm hover:bg-white text-gray-900 font-bold py-4 px-8 rounded-2xl transition-all duration-300 border border-gray-200 hover:border-gray-300 shadow-lg hover:shadow-xl text-lg"
-              >
-                View Examples
-              </a>
+
+          {/* CTA buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+            <Link
+              href="https://app.cosmicjs.com/signup"
+              className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>Start Building with AI</span>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <Link
+              href="/showcase"
+              className="btn-secondary inline-flex items-center gap-2 text-lg px-8 py-4"
+            >
+              <span>View Showcase</span>
+            </Link>
+          </div>
+
+          {/* Features grid */}
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4">
+                <Zap className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Lightning Fast
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Global CDN and optimized performance for instant loading
+              </p>
             </div>
-          )}
-          
-          {/* Hero stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl mx-auto">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900 mb-1">10K+</div>
-              <div className="text-sm text-gray-600">Websites Built</div>
+
+            <div className="flex flex-col items-center text-center">
+              <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-4">
+                <Sparkles className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                AI-Powered
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Intelligent content generation and optimization tools
+              </p>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900 mb-1">90%</div>
-              <div className="text-sm text-gray-600">Faster Development</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900 mb-1">50+</div>
-              <div className="text-sm text-gray-600">AI Features</div>
+
+            <div className="flex flex-col items-center text-center">
+              <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-teal-600 rounded-2xl flex items-center justify-center mb-4">
+                <Globe className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Developer Friendly
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Modern APIs, webhooks, and seamless integrations
+              </p>
             </div>
           </div>
-        </div>
-      </div>
-      
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-gray-400 rounded-full p-1">
-          <div className="w-1 h-3 bg-gray-400 rounded-full animate-pulse"></div>
         </div>
       </div>
     </section>

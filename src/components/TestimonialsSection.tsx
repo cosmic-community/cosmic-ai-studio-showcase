@@ -1,104 +1,119 @@
-import { getTestimonials } from '@/lib/cosmic';
-import type { Testimonial } from '@/types/cosmic';
+import { cosmic } from '@/lib/cosmic';
+import { Testimonial } from '@/types/cosmic';
+import { Star, Quote } from 'lucide-react';
+
+async function getTestimonials(): Promise<Testimonial[]> {
+  try {
+    const response = await cosmic.objects
+      .find({ type: 'testimonials' })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1)
+      .limit(6);
+    
+    return response.objects || [];
+  } catch (error) {
+    console.error('Error fetching testimonials:', error);
+    return [];
+  }
+}
+
+function StarRating({ rating }: { rating: string }): JSX.Element {
+  const stars = parseInt(rating) || 5;
+  return (
+    <div className="flex items-center gap-1">
+      {[...Array(5)].map((_, index) => (
+        <Star
+          key={index}
+          className={`w-4 h-4 ${
+            index < stars
+              ? 'text-yellow-400 fill-yellow-400'
+              : 'text-gray-300 dark:text-gray-600'
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default async function TestimonialsSection(): Promise<JSX.Element> {
   const testimonials = await getTestimonials();
-  
+
   return (
-    <section className="py-20 bg-gradient-to-br from-gray-50 to-primary-50">
+    <section className="py-20 lg:py-32 bg-white dark:bg-gray-900">
       <div className="container-custom">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Loved by Creators Worldwide
+          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+            Loved by
+            <span className="bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent"> Creators Worldwide</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Hear from developers, marketers, and creators who are building amazing things with Cosmic AI Studio
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            Join thousands of developers, marketers, and creators who trust Cosmic AI Studio 
+            to power their digital experiences.
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {testimonials && testimonials.length > 0 ? (
-            testimonials.map((testimonial: Testimonial) => (
-              <div key={testimonial.id} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 relative">
-                {/* Quote decoration */}
-                <div className="absolute top-6 right-6 text-6xl text-primary-100 font-serif leading-none">"</div>
-                
-                {/* Rating stars */}
-                <div className="flex items-center space-x-1 mb-6">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                      <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                    </svg>
-                  ))}
-                  <span className="ml-2 text-sm font-medium text-gray-600">
-                    {testimonial.metadata.rating?.value}
-                  </span>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {testimonials.map((testimonial) => (
+            <div
+              key={testimonial.id}
+              className="group relative bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-300 hover:shadow-xl dark:hover:shadow-2xl"
+            >
+              {/* Quote icon */}
+              <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-primary-500 to-purple-600 rounded-full flex items-center justify-center">
+                <Quote className="w-4 h-4 text-white" />
+              </div>
+
+              {/* Rating */}
+              {testimonial.metadata.rating && (
+                <div className="mb-4">
+                  <StarRating rating={testimonial.metadata.rating.key} />
                 </div>
-                
-                {/* Testimonial text */}
-                <blockquote className="text-lg text-gray-700 mb-6 leading-relaxed relative z-10">
-                  {testimonial.metadata.testimonial_text}
-                </blockquote>
-                
-                {/* Author info */}
-                <div className="flex items-center space-x-4">
+              )}
+
+              {/* Testimonial text */}
+              <blockquote className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                "{testimonial.metadata.testimonial_text}"
+              </blockquote>
+
+              {/* Author info */}
+              <div className="flex items-center gap-4">
+                {testimonial.metadata.customer_photo?.imgix_url ? (
                   <img
-                    src={`${testimonial.metadata.customer_photo?.imgix_url}?w=120&h=120&fit=crop&auto=format,compress`}
+                    src={`${testimonial.metadata.customer_photo.imgix_url}?w=100&h=100&fit=crop&auto=format,compress`}
                     alt={testimonial.metadata.customer_name}
                     className="w-12 h-12 rounded-full object-cover"
                   />
-                  <div className="flex-1">
-                    <div className="font-semibold text-gray-900">
-                      {testimonial.metadata.customer_name}
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      {testimonial.metadata.customer_title}
-                      {testimonial.metadata.company_name && (
-                        <span> at {testimonial.metadata.company_name}</span>
-                      )}
-                    </div>
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
+                    <span className="text-white font-semibold text-lg">
+                      {testimonial.metadata.customer_name?.charAt(0)}
+                    </span>
                   </div>
-                  {testimonial.metadata.company_logo && (
-                    <img
-                      src={`${testimonial.metadata.company_logo.imgix_url}?w=80&h=40&fit=crop&auto=format,compress`}
-                      alt={testimonial.metadata.company_name}
-                      className="w-10 h-10 object-contain opacity-60"
-                    />
-                  )}
-                </div>
+                )}
                 
-                {/* Use case badge */}
-                <div className="absolute bottom-6 right-6">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
-                    {testimonial.metadata.use_case_category?.value}
-                  </span>
+                <div>
+                  <div className="font-semibold text-gray-900 dark:text-white">
+                    {testimonial.metadata.customer_name}
+                  </div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    {testimonial.metadata.customer_title}
+                    {testimonial.metadata.company_name && (
+                      <span> at {testimonial.metadata.company_name}</span>
+                    )}
+                  </div>
                 </div>
               </div>
-            ))
-          ) : (
-            <div className="col-span-full text-center py-12">
-              <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4 animate-pulse"></div>
-              <p className="text-gray-500">Loading testimonials...</p>
+
+              {/* Use case category */}
+              {testimonial.metadata.use_case_category && (
+                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200">
+                    {testimonial.metadata.use_case_category.value}
+                  </span>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        
-        {/* Additional testimonial highlights */}
-        <div className="mt-16">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-6 bg-white/50 backdrop-blur-sm rounded-xl">
-              <div className="text-3xl font-bold text-primary-600 mb-2">4.9/5</div>
-              <div className="text-sm text-gray-600">Average Rating</div>
-            </div>
-            <div className="text-center p-6 bg-white/50 backdrop-blur-sm rounded-xl">
-              <div className="text-3xl font-bold text-primary-600 mb-2">500+</div>
-              <div className="text-sm text-gray-600">Happy Customers</div>
-            </div>
-            <div className="text-center p-6 bg-white/50 backdrop-blur-sm rounded-xl">
-              <div className="text-3xl font-bold text-primary-600 mb-2">98%</div>
-              <div className="text-sm text-gray-600">Would Recommend</div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
