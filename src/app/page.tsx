@@ -64,20 +64,26 @@ async function UseCasesSection(): Promise<JSX.Element> {
                         {useCase.metadata.use_case_title}
                       </h3>
                       <div className="flex items-center space-x-4 mb-3">
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
-                          {useCase.metadata.industry?.value}
-                        </span>
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                          {useCase.metadata.target_audience?.value}
-                        </span>
+                        {useCase.metadata.industry?.value && (
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+                            {useCase.metadata.industry.value}
+                          </span>
+                        )}
+                        {useCase.metadata.target_audience?.value && (
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                            {useCase.metadata.target_audience.value}
+                          </span>
+                        )}
                       </div>
                       <p className="text-gray-600 mb-4 line-clamp-3">
                         {useCase.metadata.description}
                       </p>
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-green-600">
-                          ⚡ {useCase.metadata.implementation_time} setup
-                        </span>
+                        {useCase.metadata.implementation_time && (
+                          <span className="text-sm font-medium text-green-600">
+                            ⚡ {useCase.metadata.implementation_time} setup
+                          </span>
+                        )}
                         <div className="flex space-x-1">
                           {useCase.metadata.ai_features_used?.slice(0, 2).map((feature, idx) => (
                             <span key={idx} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
@@ -122,11 +128,13 @@ async function VideosSection(): Promise<JSX.Element> {
         {featuredVideo && (
           <div className="max-w-4xl mx-auto">
             <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl">
-              <img
-                src={`${featuredVideo.metadata.thumbnail?.imgix_url}?w=800&h=450&fit=crop&auto=format,compress`}
-                alt={featuredVideo.metadata.video_title}
-                className="w-full h-full object-cover"
-              />
+              {featuredVideo.metadata.thumbnail?.imgix_url && (
+                <img
+                  src={`${featuredVideo.metadata.thumbnail.imgix_url}?w=800&h=450&fit=crop&auto=format,compress`}
+                  alt={featuredVideo.metadata.video_title || 'Video thumbnail'}
+                  className="w-full h-full object-cover"
+                />
+              )}
               <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                 <button className="w-20 h-20 bg-white bg-opacity-20 backdrop-blur-sm rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-300">
                   <div className="w-0 h-0 border-l-8 border-r-0 border-t-4 border-b-4 border-l-white border-t-transparent border-b-transparent ml-1"></div>
@@ -143,11 +151,13 @@ async function VideosSection(): Promise<JSX.Element> {
                 {videos.slice(1, 3).map((video: Video) => (
                   <div key={video.id} className="group cursor-pointer">
                     <div className="relative aspect-video rounded-xl overflow-hidden">
-                      <img
-                        src={`${video.metadata.thumbnail?.imgix_url}?w=400&h=225&fit=crop&auto=format,compress`}
-                        alt={video.metadata.video_title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+                      {video.metadata.thumbnail?.imgix_url && (
+                        <img
+                          src={`${video.metadata.thumbnail.imgix_url}?w=400&h=225&fit=crop&auto=format,compress`}
+                          alt={video.metadata.video_title || 'Video thumbnail'}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      )}
                       <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center">
                         <div className="w-12 h-12 bg-white bg-opacity-20 backdrop-blur-sm rounded-full flex items-center justify-center">
                           <div className="w-0 h-0 border-l-4 border-r-0 border-t-2 border-b-2 border-l-white border-t-transparent border-b-transparent ml-0.5"></div>
@@ -191,18 +201,24 @@ async function InsightsSection(): Promise<JSX.Element> {
               posts.map((post: BlogPost) => (
                 <article key={post.id} className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
                   <div className="aspect-video overflow-hidden">
-                    <img
-                      src={`${post.metadata.featured_image?.imgix_url}?w=400&h=225&fit=crop&auto=format,compress`}
-                      alt={post.metadata.post_title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                    {post.metadata.featured_image?.imgix_url && (
+                      <img
+                        src={`${post.metadata.featured_image.imgix_url}?w=400&h=225&fit=crop&auto=format,compress`}
+                        alt={post.metadata.post_title || 'Blog post image'}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    )}
                   </div>
                   <div className="p-6">
                     <div className="flex items-center space-x-4 mb-3">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
-                        {post.metadata.category?.value}
-                      </span>
-                      <span className="text-sm text-gray-500">{post.metadata.reading_time}</span>
+                      {post.metadata.category?.value && (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+                          {post.metadata.category.value}
+                        </span>
+                      )}
+                      {post.metadata.reading_time && (
+                        <span className="text-sm text-gray-500">{post.metadata.reading_time}</span>
+                      )}
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors line-clamp-2">
                       {post.metadata.post_title}
@@ -212,14 +228,18 @@ async function InsightsSection(): Promise<JSX.Element> {
                     </p>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <img
-                          src={`${post.metadata.author_photo?.imgix_url}?w=64&h=64&fit=crop&auto=format,compress`}
-                          alt={post.metadata.author_name}
-                          className="w-8 h-8 rounded-full"
-                        />
-                        <span className="text-sm font-medium text-gray-700">
-                          {post.metadata.author_name}
-                        </span>
+                        {post.metadata.author_photo?.imgix_url && (
+                          <img
+                            src={`${post.metadata.author_photo.imgix_url}?w=64&h=64&fit=crop&auto=format,compress`}
+                            alt={post.metadata.author_name || 'Author photo'}
+                            className="w-8 h-8 rounded-full"
+                          />
+                        )}
+                        {post.metadata.author_name && (
+                          <span className="text-sm font-medium text-gray-700">
+                            {post.metadata.author_name}
+                          </span>
+                        )}
                       </div>
                       <button className="text-primary-600 hover:text-primary-700 font-medium text-sm">
                         Read more →
@@ -247,7 +267,7 @@ export default async function LandingPage(): Promise<JSX.Element> {
   return (
     <>
       <HeroSection page={homepage} />
-      <FeaturesSection features={homepage?.metadata.features_section} />
+      <FeaturesSection features={homepage?.metadata?.features_section} />
       <StatsSection />
       <ShowcaseSection />
       <UseCasesSection />

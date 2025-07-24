@@ -1,9 +1,8 @@
-// src/lib/cosmic.ts
 import { createBucketClient } from '@cosmicjs/sdk';
 import type { Page, ShowcaseProject, BlogPost, Video, Testimonial, UseCase } from '@/types/cosmic';
 
 // Initialize Cosmic client
-const cosmic = createBucketClient({
+export const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG || '',
   readKey: process.env.COSMIC_READ_KEY || '',
   apiEnvironment: "staging",
